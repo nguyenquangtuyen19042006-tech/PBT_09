@@ -74,3 +74,133 @@ document.querySelector("#todoList li:first-child");
 ```js
 document.querySelectorAll("nav a");
 ```
+## Câu A2
+
+### Khác nhau giữa `innerHTML` và `textContent`
+
+#### `innerHTML`
+
+* Đọc hoặc ghi nội dung dưới dạng **HTML**.
+* Trình duyệt sẽ phân tích các thẻ HTML.
+
+Ví dụ:
+
+```js
+document.getElementById("demo").innerHTML =
+    "<b>Hello</b>";
+```
+
+Kết quả hiển thị:
+
+```html
+Hello
+```
+
+(chữ **Hello** được in đậm)
+
+---
+
+#### `textContent`
+
+* Đọc hoặc ghi nội dung dưới dạng **text thuần**.
+* Không phân tích thẻ HTML.
+
+Ví dụ:
+
+```js
+document.getElementById("demo").textContent =
+    "<b>Hello</b>";
+```
+
+Kết quả hiển thị:
+
+```html
+<b>Hello</b>
+```
+
+(thấy nguyên văn ký tự `<b>`)
+
+---
+
+### Dùng `innerHTML`
+
+Khi muốn tạo HTML động:
+
+```js
+list.innerHTML =
+    "<li>HTML</li><li>CSS</li>";
+```
+
+---
+
+### Dùng `textContent`
+
+Khi hiển thị dữ liệu do người dùng nhập hoặc dữ liệu từ API.
+
+```js
+message.textContent = userName;
+```
+
+An toàn hơn.
+
+---
+
+### Tại sao `innerHTML` gây XSS?
+
+XSS (**Cross-Site Scripting**) xảy ra khi dữ liệu người dùng được chèn vào trang và được trình duyệt thực thi như mã HTML/JavaScript.
+
+Ví dụ user nhập:
+
+```html
+<img src=x onerror="alert('Hacked!')">
+```
+
+Code:
+
+```js
+const userInput =
+    document.querySelector("#search").value;
+
+document.querySelector("#result").innerHTML =
+    userInput;
+```
+
+Trình duyệt sẽ tạo thẻ:
+
+```html
+<img src="x" onerror="alert('Hacked!')">
+```
+
+Ảnh lỗi ⇒ `onerror` chạy ⇒
+
+```js
+alert("Hacked!");
+```
+
+Đây là lỗ hổng XSS.
+
+---
+
+### Cách sửa
+
+Dùng `textContent` thay vì `innerHTML`:
+
+```js
+const userInput =
+    document.querySelector("#search").value;
+
+document.querySelector("#result").textContent =
+    userInput;
+```
+
+Lúc này trình duyệt chỉ hiển thị:
+
+```html
+<img src=x onerror="alert('Hacked!')">
+```
+
+như văn bản thông thường và **không thực thi JavaScript**.
+
+---
+
+
