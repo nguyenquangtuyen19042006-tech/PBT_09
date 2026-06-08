@@ -4,7 +4,7 @@ const images = Array.from(
         `https://placehold.co/600x300?text=Image+${i+1}`
 );
 
-let current = 0;
+let current = 0 ;
 let playing = false;
 let interval;
 
