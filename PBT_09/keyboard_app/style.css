@@ -1,0 +1,52 @@
+body{
+    font-family:Arial,sans-serif;
+    text-align:center;
+    padding:30px;
+}
+
+img{
+    width:600px;
+    max-width:100%;
+    cursor:pointer;
+}
+
+button{
+    padding:10px 15px;
+}
+
+:focus{
+    outline:3px solid blue;
+    outline-offset:2px;
+}
+
+.modal,
+.palette{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.6);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.modal-content,
+.palette-content{
+    background:white;
+    padding:20px;
+    width:400px;
+}
+
+.hidden{
+    display:none;
+}
+
+.palette-list{
+    text-align:left;
+    margin-top:10px;
+}
+
+.palette-item{
+    padding:8px;
+    cursor:pointer;
+}
