@@ -418,3 +418,47 @@ window.addEventListener("load", () => {
 8. Nên dùng `textContent` thay `innerHTML`
 
 
+## Câu C2
+
+**1. Tại sao bind event lên 1000 elements là bad practice?**
+
+* Tạo **1000 event listeners** → tốn bộ nhớ.
+* Tốn thời gian khởi tạo.
+* Khó quản lý khi thêm/xóa phần tử.
+
+**Event Delegation:**
+
+Gắn **1 listener lên phần tử cha**, tận dụng Event Bubbling.
+
+```js
+document.body.addEventListener("click", (e) => {
+    if (e.target.matches(".item")) {
+        console.log("clicked");
+    }
+});
+```
+
+→ Chỉ cần **1 listener** thay vì 1000.
+
+---
+
+**2. Dùng DocumentFragment**
+
+```js
+const fragment = document.createDocumentFragment();
+
+for (let i = 0; i < 1000; i++) {
+    const div = document.createElement("div");
+    div.textContent = `Item ${i}`;
+    fragment.appendChild(div);
+}
+
+document.body.appendChild(fragment);
+```
+
+**Tại sao nhanh hơn?**
+
+* Thêm 1000 phần tử vào `fragment` chỉ diễn ra trong bộ nhớ.
+* Cuối cùng mới append vào DOM **1 lần**.
+* Giảm số lần **reflow/repaint** từ ~1000 xuống 1 lần.
+
