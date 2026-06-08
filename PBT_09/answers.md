@@ -266,3 +266,155 @@ Giải thích:
 ---
 
 
+# Phần C
+## Câu C1
+
+### Các lỗi và cách sửa
+
+#### 1. Sai event `"onclick"`
+```js
+addEventListener("onclick", function() {
+```
+```js
+addEventListener("click", function() {
+```
+---
+
+#### 2. Gán lại cho biến `const`
+```js
+countDisplay = count;
+```
+
+`countDisplay` là `const`, không được gán lại.
+
+```js
+countDisplay.textContent = count;
+```
+---
+
+#### 3. Xóa history sai cách
+```js
+historyList.innerHTML = null;
+```
+```js
+historyList.innerHTML = "";
+```
+---
+#### 4. `item.remove` thiếu `()`
+
+```js
+item.remove;
+```
+Đây chỉ là tham chiếu hàm.
+
+```js
+item.remove();
+```
+---
+
+#### 5. `localStorage.getItem()` trả về string
+
+```js
+count = localStorage.getItem("count");
+```
+
+Ví dụ count sẽ là `"5"` thay vì `5`.
+
+```js
+count = Number(localStorage.getItem("count")) || 0;
+```
+---
+
+#### 6. Không load lại history từ localStorage
+
+Đã lưu:
+
+```js
+localStorage.setItem("history", historyList.innerHTML);
+```
+nhưng không khôi phục.
+
+```js
+historyList.innerHTML =
+    localStorage.getItem("history") || "";
+```
+---
+
+#### 7. Sau khi load history, click vào các item không xóa được
+
+Các event listener trước đó không được lưu vào localStorage.
+
+Giải pháp:
+
+```js
+historyList.addEventListener("click", (e) => {
+    if (e.target.tagName === "LI") {
+        deleteHistory(e.target);
+    }
+});
+```
+
+=> dùng Event Delegation thay vì gắn listener cho từng `li`.
+
+---
+
+#### 8. Nên dùng `textContent` thay vì `innerHTML`
+
+```js
+countDisplay.innerHTML = count;
+```
+
+```js
+countDisplay.textContent = count;
+```
+
+An toàn và phù hợp hơn.
+---
+
+### Code sửa các lỗi chính
+
+```js
+document.querySelector("#decrementBtn")
+    .addEventListener("click", function () {
+        count--;
+        countDisplay.textContent = count;
+    });
+
+document.querySelector("#resetBtn")
+    .addEventListener("click", () => {
+        count = 0;
+        countDisplay.textContent = count;
+        historyList.innerHTML = "";
+    });
+
+document.querySelector("#clearHistory")
+    .addEventListener("click", () => {
+        const items = historyList.querySelectorAll("li");
+
+        items.forEach(item => {
+            item.remove();
+        });
+    });
+
+window.addEventListener("load", () => {
+    count =
+        Number(localStorage.getItem("count")) || 0;
+
+    countDisplay.textContent = count;
+
+    historyList.innerHTML =
+        localStorage.getItem("history") || "";
+});
+```
+### Tổng kết lỗi
+
+1. `"onclick"` → `"click"`
+2. Gán lại `const countDisplay`
+3. `innerHTML = null`
+4. `item.remove` thiếu `()`
+5. `getItem()` trả string
+6. Không load lại history
+7. Event listener của history bị mất sau reload
+8. Nên dùng `textContent` thay `innerHTML`
+
+
