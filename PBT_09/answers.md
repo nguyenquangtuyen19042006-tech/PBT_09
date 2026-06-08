@@ -203,4 +203,66 @@ như văn bản thông thường và **không thực thi JavaScript**.
 
 ---
 
+## Câu A3
+
+Khi click vào button:
+
+```html
+<div id="outer">
+    <div id="inner">
+        <button id="btn">Click me</button>
+    </div>
+</div>
+```
+
+Sự kiện sẽ **bubbling** từ phần tử con lên phần tử cha:
+
+```text
+button → inner → outer
+```
+
+---
+
+### Không dùng `stopPropagation()`
+
+Output:
+
+```text
+BUTTON
+INNER
+OUTER
+```
+
+Giải thích:
+
+1. Click vào `button`
+2. Chạy event của `#btn`
+3. Nổi bọt (bubble) lên `#inner`
+4. Tiếp tục nổi bọt lên `#outer`
+
+---
+
+### Có `e.stopPropagation()`
+
+```js
+document.querySelector("#btn").addEventListener("click", (e) => {
+    console.log("BUTTON");
+    e.stopPropagation();
+});
+```
+
+Output:
+
+```text
+BUTTON
+```
+
+Giải thích:
+
+* `stopPropagation()` chặn sự kiện lan lên phần tử cha.
+* Sau khi chạy event của button, sự kiện dừng lại.
+* `INNER` và `OUTER` không được gọi.
+
+---
+
 
